@@ -1,0 +1,28 @@
+version: '2.3'
+
+services:
+
+  nginx:
+    image: nginx:1.15-alpine
+    mem_limit: 100m
+    mem_reservation: 10m
+    restart: always
+    environment: 
+      - WATCHTOWER_LABEL_ENABLE=false
+    volumes:
+      - ./data/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /var/installed/alphadevui/data/certbot/conf:/etc/letsencrypt
+      - /var/installed/alphadevui/data/certbot/www:/var/www/certbot
+    ports:
+      - "8181:8181"
+    
+  web:
+    image: index.docker.io/wimtach2020/alphaglobalitservice
+    restart: always
+    mem_limit: 13312m
+    mem_reservation: 2048m
+    ports:
+      - "8080:8080"
+    environment:
+      - LOG_LEVEL=DEBUG
+      - TZ=America/Toronto
